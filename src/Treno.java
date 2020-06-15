@@ -1,27 +1,50 @@
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
-public class Treno {
+public class Treno implements Serializable {
     private String codice;
     private int postiDisponibili;
-    private ArrayList<String> stops;
+    private boolean partito = false;
+
+    public boolean isPartito() {
+        return partito;
+    }
+
+    public void setPartito(boolean partito) {
+        this.partito = partito;
+    }
+
+    private LinkedList<String> stops = new LinkedList<>();
     private LocalTime orarioPartenza;
     private LocalTime orarioArrivo;
-    private ArrayList<String> giorni;
-    private long ticket_prize;
+    private ArrayList<String> giorni= new ArrayList<>();
+    private float ticket_prize;
+    private boolean every_day = false;
 
-    public void setStops(ArrayList<String> stops) {
+    public Treno(String codice, int postiDisponibili, LinkedList<String> stops, LocalTime orarioPartenza, LocalTime orarioArrivo, float ticket_prize) {
+        this.codice = codice;
+        this.postiDisponibili = postiDisponibili;
+        this.stops = stops;
+        this.orarioPartenza = orarioPartenza;
+        this.orarioArrivo = orarioArrivo;
+        this.ticket_prize = ticket_prize;
+    }
+
+    public LinkedList<String> getStops() {
+        return stops;
+    }
+    public void setStops(LinkedList<String> stops) {
         this.stops = stops;
     }
 
-    public long getTicket_prize() {
+    public float getTicket_prize() {
         return ticket_prize;
     }
 
-    public void setTicket_prize(long ticket_prize) {
+    public void setTicket_prize(float ticket_prize) {
         this.ticket_prize = ticket_prize;
     }
 
@@ -31,19 +54,13 @@ public class Treno {
 
     public void setEvery_day(boolean every_day) {
         this.every_day = every_day;
+
     }
 
-    private boolean every_day = false;
 
 
-    public Treno(String codice, int postiDisponibili, ArrayList<String> stops, LocalTime orarioPartenza, LocalTime orarioArrivo, long ticket_prize) {
-        this.codice = codice;
-        this.postiDisponibili = postiDisponibili;
-        this.stops = stops;
-        this.orarioPartenza = orarioPartenza;
-        this.orarioArrivo = orarioArrivo;
-        this.ticket_prize = ticket_prize;
-    }
+
+
 
     public String getCodice() {
         return codice;
@@ -63,7 +80,7 @@ public class Treno {
     }
 
     public void setGiorni(ArrayList<String> giorni) {
-        this.giorni = giorni;
+       this.giorni= giorni;
     }
 
     public int getPostiDisponibili() {
@@ -85,25 +102,48 @@ public class Treno {
     public void setOrarioPartenza(LocalTime orarioPartenza) {
         this.orarioPartenza = orarioPartenza;
     }
-   //public static void main(String[] args){
-        //TrainMap map= new TrainMap();
 
-        /*Treno t = new Treno();
-        t.setOrarioPartenza(LocalTime.parse("03:30"));
-    t.setOrarioArrivo(LocalTime.parse("07:00"));
-        System.out.println(t.getOrarioPartenza());
-        System.out.println(t.getOrarioArrivo());
-        LocalTime arrivo = t.getOrarioArrivo();
-        LocalTime partenza = t.getOrarioPartenza();
-        System.out.println("Duarata viaggio: "+ ChronoUnit.HOURS.between(partenza,arrivo)+":"+ (ChronoUnit.MINUTES.between(partenza,arrivo)-60*ChronoUnit.HOURS.between(partenza,arrivo)));
-        */
-        /*String[] x = new String[2];
-        x[0]="Catania";
-        x[1]="Palermo";
-        System.out.println("Fermate :"+Arrays.toString(x));*/
+    @Override
+    public String toString() {
+        String s= "BEGIN\n\n";
+        s=s+ "----CODICE: "+ codice+ "\n\n";
+        s= s+ "---POSTI DISPONIBILI: "+ postiDisponibili + "\n\n";
+        int i=1;
+        for(String m: stops){
+
+            s=s+ "---FERMATA "+i+ ": " +m;
+            i++;
+        }
+        s=s+ "\n\n---ORARIO DI PARTENZA: "+ orarioPartenza+ "\n\n";
+        s=s+ "---ORARIO DI ARRIVO: "+ orarioArrivo+"\n\n";
+        s=s+ "---DURATA DEL VIAGGIO: "+ ChronoUnit.HOURS.between(orarioPartenza,orarioArrivo)+" ORE E "+ (ChronoUnit.MINUTES.between(orarioPartenza,orarioArrivo)-60*ChronoUnit.HOURS.between(orarioPartenza,orarioArrivo))+" MINUTI\n";
+        s=s+ "\n---PREZZO DEL BIGLIETTO: " + ticket_prize+ "\n\n";
+        if(isEvery_day()){
+            s=s+ "---OGNI GIORNO\n\n";
+        }
+        else {
+            int y=1;
+            for (String n : giorni) {
+
+                s = s + "---GIORNO "+y+ " "+ n+"\n\n";
+                y++;
+            }
+        }
+        s=s+ "END";
+
+        return s;
+    }
+    public String toStringCode(){
+        String s;
+
+        s="\n\nCODICE: "+ codice +" DA " + stops.getFirst() + " A "+ stops.getLast();
+
+        return s;
 
 
-   //}
+    }
+
+
 
 
 
