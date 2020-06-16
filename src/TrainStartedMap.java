@@ -30,7 +30,7 @@ public class TrainStartedMap{
                 "map=" + map +
                 '}';
     }
-    public HashMap<String,TrenoPartito> getMapCopy(){
+    public synchronized HashMap<String,TrenoPartito> getMapCopy(){
         HashMap<String,TrenoPartito> mapCopy = new HashMap<>();
         Set<String> keyset = map.keySet();
         for (String m:keyset){
