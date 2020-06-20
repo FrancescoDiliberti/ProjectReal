@@ -57,7 +57,7 @@ public class ClientTreno {
                 switch (choice){
                     case 0:
                         boolean show = true;
-                        System.out.println("Ecco l'elenco di tutti i codice dei treni...");
+
 
 
 
@@ -106,56 +106,18 @@ public class ClientTreno {
                                     msg_received = server_scanner.next();
                                     int i=1;
                                     if(msg_received.equals("START_OK")){
-                                        do{
-                                            try {
-                                                Thread.sleep(30000);
+                                        System.out.println("Il treno è partito...");
 
-                                                System.out.println("Fermata"+ i+ " passata");
-                                                pw.println("UPDATE");
-                                                pw.flush();
-                                                msg_received = server_scanner.next();
-                                                i++;
-                                            } catch (InterruptedException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }while(!msg_received.equals("STOP_UPD"));
-                                        msg_to_send = "QUIT";
-                                        pw.println(msg_to_send);
-                                        pw.flush();
-                                        msg_received = server_scanner.next();
-                                        if(msg_received.equals("QUIT_OK")){
-                                            go = false;
-                                            System.out.println("Quitting client...");
-                                            break;
-                                        }
-                                        else if(msg_received.equals("QUIT_ERROR")){
-                                            System.out.println("Unable to quit connection...");
-                                            break;
-
-                                        }
 
 
 
 
                                     }
                                     else if(msg_received.equals("NOTSTART")){
-                                        System.out.println("Treno già partito... Errore");
-                                        msg_to_send = "QUIT";
-                                        pw.println(msg_to_send);
-                                        pw.flush();
-                                        msg_received = server_scanner.next();
-                                        if(msg_received.equals("QUIT_OK")){
-                                            go = false;
-                                            System.out.println("Quitting client...");
-                                            break;
-                                        }
-                                        else if(msg_received.equals("QUIT_ERROR")){
-                                            System.out.println("Unable to quit connection...");
-                                            break;
-
-                                        }
+                                        System.out.println("Treno già in movimento.. Errore");
                                         break;
                                     }
+
 
                                     else System.out.println("Error: unknown response to start "+msg_received);
                                     break;

@@ -57,6 +57,7 @@ public class ClientAmministrazione {
                 System.out.println("-------------------------------");
                 System.out.print("Digita la tua scelta---->");
                 choice = user_scanner.nextInt();
+                long time;
 
                 switch (choice) {
                     case 0:
@@ -91,8 +92,10 @@ public class ClientAmministrazione {
                                 while (hasStops) {
                                     System.out.print("Inserisci la fermata "+i+": ");
                                     String stop = user_scanner.next();
+                                    System.out.print("Quanti minuti ci mette da "+departure+ " a "+stop +"?");
+                                    time= user_scanner.nextLong();
                                     System.out.println("DEBUG: Sending " + stop);
-                                    pw.println(stop);
+                                    pw.println(stop+ " "+ time);
                                     i++;
                                     pw.flush();
                                     do {
@@ -102,8 +105,10 @@ public class ClientAmministrazione {
                                         if (resp.equals("N")) {
                                             hasStops = false;
                                             error_2=false;
-                                            System.out.println("DEBUG: Sending " + arrive);
-                                            pw.println(arrive);
+                                            System.out.print("Quanti minuti ci mette da "+stop+" a "+arrive +"?");
+                                            time = user_scanner.nextLong();
+                                            System.out.println("DEBUG: Sending " + arrive + " "+time);
+                                            pw.println(arrive+ " "+time);
                                             pw.flush();
                                             System.out.println("DEBUG: Sending ENDOFSTOPS");
                                             pw.println("ENDOFSTOPS");
@@ -112,6 +117,7 @@ public class ClientAmministrazione {
                                         else if(resp.equals("Y")){
                                             hasStops= true;
                                             error_2= false;
+                                            departure = stop;
                                         }
                                         else{
                                             System.out.println("Inserisci una risposta valida (Y/N)");
@@ -125,8 +131,11 @@ public class ClientAmministrazione {
 
                             } else if (s.equals("N")) {
                                 error = false;
+
+                                System.out.print("Quanti minuti ci mette per arrivare a "+arrive +"?");
+                                time = user_scanner.nextLong();
                                 System.out.println("DEBUG: Sending " + arrive);
-                                pw.println(arrive);
+                                pw.println(arrive+" "+time);
                                 pw.flush();
                                 System.out.println("DEBUG: Sending ENDOFSTOPS");
                                 pw.println("ENDOFSTOPS");

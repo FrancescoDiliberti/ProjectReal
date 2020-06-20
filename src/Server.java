@@ -7,7 +7,7 @@ public class Server {
     Socket client_socket;
     private int port;
     TrainMap trainmap = new TrainMap();
-    TrainStartedMap startedMap = new TrainStartedMap();
+
 
     private int client_id = 0;
 
@@ -38,7 +38,7 @@ public class Server {
                 System.out.println("Listening on port " + port);
                 client_socket = socket.accept();
 
-                ClientManager cm = new ClientManager(client_socket, trainmap, startedMap);
+                ClientManager cm = new ClientManager(client_socket, trainmap);
                 Thread t = new Thread(cm, "client_" + client_id);
                 t.start();
                 client_id++;

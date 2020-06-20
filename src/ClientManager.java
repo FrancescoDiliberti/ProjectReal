@@ -10,12 +10,12 @@ public class ClientManager implements Runnable{
 
     private Socket client_socket;
     private TrainMap trainmap;
-    private TrainStartedMap startedMap;
 
-    public ClientManager(Socket myclient, TrainMap map, TrainStartedMap map2) {
+
+    public ClientManager(Socket myclient, TrainMap map) {
         client_socket = myclient;
         this.trainmap = map;
-        this.startedMap = map2;
+
 
     }
 
@@ -28,7 +28,7 @@ public class ClientManager implements Runnable{
         PrintWriter pw = null;
         Scanner client_scanner = null;
         HashMap<String,Treno> mapCopy = new HashMap<>();
-        HashMap<String,TrenoPartito> startCopy = new HashMap<>();
+        HashMap<String,Treno> startCopy = new HashMap<>();
 
         try {
             client_scanner = new Scanner(client_socket.getInputStream());
@@ -49,18 +49,29 @@ public class ClientManager implements Runnable{
                 int seats = msg_scanner.nextInt();
                 String prize = msg_scanner.next();
                 LinkedList<String> stops= new LinkedList<>();
+                ArrayList<Long> times = new ArrayList<>();
                 String departure = msg_scanner.next();
                 stops.add(departure.toUpperCase());
 
-                String next_stop = client_scanner.nextLine();
-                System.out.println("Server Received: "+next_stop);
-                stops.add(next_stop.toUpperCase());
-                next_stop = client_scanner.nextLine();
-                System.out.println("Server Received: "+next_stop);
-                while(!next_stop.equals("ENDOFSTOPS")){
-                    stops.add(next_stop.toUpperCase());
-                    next_stop = client_scanner.nextLine();
-                    System.out.println("Server Received: "+next_stop);
+                String next_s = client_scanner.nextLine();
+
+                Scanner scan = new Scanner(next_s);
+                System.out.println("Server Received: "+next_s);
+                stops.add(scan.next().toUpperCase());
+                times.add(scan.nextLong());
+                message = client_scanner.nextLine();
+                System.out.println("Server Received: "+message);
+                while(!message.equals("ENDOFSTOPS")){
+                    scan = new Scanner(message);
+
+                    next_s = scan.next();
+                    long time = scan.nextLong();
+
+                    times.add(time);
+                    stops.add(next_s.toUpperCase());
+                    message = client_scanner.nextLine();
+
+                    System.out.println("Server Received: "+next_s+" "+ time);
 
                 }
 
@@ -89,7 +100,7 @@ public class ClientManager implements Runnable{
                     pw.println("CODE_OK");
                     pw.flush();
 
-                    Treno t = new Treno(code,seats,stops, LocalTime.parse(dep_time),LocalTime.parse(arr_time),Float.parseFloat(prize));
+                    Treno t = new Treno(code,seats,stops, LocalTime.parse(dep_time),LocalTime.parse(arr_time),Float.parseFloat(prize),times);
                     t.setEvery_day(every_day);
 
                     trainmap.add(code,t);
@@ -102,16 +113,13 @@ public class ClientManager implements Runnable{
                 else {
                     ArrayList<String> dayList = new ArrayList<>();
                     while (!days.equals("END_OFMSG")) {
-                        if(days.equals("")){
-                            System.out.println("Giorno vuoto");
-                            days = client_scanner.nextLine();
-                        }
-                        else{
+
+
                             System.out.println("Server Received: " +days);
                             dayList.add(days.toUpperCase());
                             System.out.println(dayList);
                             days = client_scanner.nextLine();
-                        }
+
 
 
                     }
@@ -130,7 +138,7 @@ public class ClientManager implements Runnable{
                     }
                     pw.println("CODE_OK");
                     pw.flush();
-                    Treno t = new Treno(code, seats, stops, LocalTime.parse(dep_time), LocalTime.parse(arr_time), Float.parseFloat(prize));
+                    Treno t = new Treno(code, seats, stops, LocalTime.parse(dep_time), LocalTime.parse(arr_time), Float.parseFloat(prize),times);
                     t.setGiorni(dayList);
                     trainmap.add(code, t);
                     System.out.println("SERVER LOG:Added "+t.toString());
@@ -177,7 +185,7 @@ public class ClientManager implements Runnable{
                 String day = msg_scanner.next().toUpperCase();
                 String time = msg_scanner.next();
                 mapCopy = trainmap.getMapCopy();
-                startCopy = startedMap.getMapCopy();
+
 
                 Set<String> keySet = mapCopy.keySet();
 
@@ -189,31 +197,22 @@ public class ClientManager implements Runnable{
                             //cerco treni con orario di partenza dopo l'orario fornito dall'utente
                             //cerco l'arrivo nella lista delle fermate eccetto la prima posizione
 
-                            if(startCopy.containsKey(m)){// se è nella mappa dei treni partiti invio quello
-                                pw.println(startCopy.get(m).toString());
-                                pw.flush();
 
-                            }
-                            else{
                                 pw.println(mapCopy.get(m).toString());
                                 pw.flush();
-                            }
+
 
 
                         }
-                        System.out.println("DEBUG: Treno per ora non trovato");
+                        System.out.println("DEBUG: Treno  non trovato");
                     }
                     else{
                         if (mapCopy.get(m).getOrarioPartenza().compareTo(LocalTime.parse(time)) >= 0 && mapCopy.get(m).getStops().contains(dep) && !dep.equals(mapCopy.get(m).getStops().getLast()) && mapCopy.get(m).getStops().contains(arr) && !arr.equals(mapCopy.get(m).getStops().getFirst()) && mapCopy.get(m).getGiorni().contains(day)) {
-                            if(startCopy.containsKey(m)){// se è nella mappa dei treni partiti invio quello
-                                pw.println(startCopy.get(m).toString());
-                                pw.flush();
 
-                            }
-                            else{
+
                                 pw.println(mapCopy.get(m).toString());
                                 pw.flush();
-                            }
+
                         }
 
                         }
@@ -296,20 +295,13 @@ public class ClientManager implements Runnable{
                         System.out.println("La ricerca è stata interrotta..");
                     }
                     else{//se siamo qui il treno è presente almeno nella mappa generica dei treni
-                        startCopy = startedMap.getMapCopy();
-                        if (startCopy.containsKey(code)) {
-                            //se il treno è nella lista dei treni partiti invio quello
-                            pw.println(startCopy.get(code).toString());
-                            pw.flush();
-                            coding = false;
-                        }
-                        //altrimenti invio quello della mappa dove sono salvati tutti i treni
-                        else {
+
+
 
                             pw.println(mapCopy.get(code).toString());
                             pw.flush();
                             coding = false;
-                        }
+
                     }
 
 
@@ -332,84 +324,21 @@ public class ClientManager implements Runnable{
 
 
 
+
                 String cmd2 = client_scanner.nextLine();
                 if (cmd2.equals("START")){
-
-                    startCopy = startedMap.getMapCopy();
-                    if(!startCopy.containsKey(code)){//se il trneno non è ancora presente nella mappa dei treni partiti
-
-                    int seats = mapCopy.get(code).getPostiDisponibili();
-
-                    TrenoPartito tr = new TrenoPartito(code,seats,mapCopy.get(code).getStops(),mapCopy.get(code).getOrarioPartenza(),mapCopy.get(code).getOrarioArrivo(),mapCopy.get(code).getTicket_prize(),LocalTime.now());
-                    if(mapCopy.get(code).isEvery_day()){
-                        tr.setEvery_day(true);
-                    }
-                    else{
-                        tr.setGiorni(mapCopy.get(code).getGiorni());
-
-                    }
-
-                    tr.setUltimaFermataPassata(mapCopy.get(code).getStops().get(0));//inizialmente è la partenza
-                    startedMap.add(code,tr);
-                    pw.println("START_OK");
-                    pw.flush();
-                    //ricevuto start metto come ultima fermata passata la partenza e aspetto l'update
-                    startedMap.update(code,0);
-
-                    int i= 1;
-                    cmd= client_scanner.nextLine();
-
-                    while(cmd.equals("UPDATE")){
-                        //fa l'update della fermata del treno
-                        if(startedMap.update(code,i)){
-                            pw.println("UPDATE_OK");
-                            pw.flush();
-                            i++;
-                            cmd= client_scanner.nextLine();
-
-
-                        }
-                        else{
-                            pw.println("STOP_UPD");
-                            pw.flush();
-                            cmd = client_scanner.nextLine();
-                        }
-
-
-
-
-
-
-                    }
-                    }
-
-                    else{
+                    if(mapCopy.get(code).isMoving()){
                         pw.println("NOTSTART");
                         pw.flush();
-
-                    }
-
-                    if(cmd.equals("QUIT")) {
-
-                        System.out.println("Server: Closing connection to "+client_socket.getRemoteSocketAddress());
-                        try {
-                            pw.println("QUIT_OK");
-                            pw.flush();
-                            client_socket.close();
-
-                        } catch (IOException e) {
-                            pw.println("QUIT_ERROR");
-                            pw.flush();
-                            e.printStackTrace();
-                        }
-                        go = false;
-
                     }
                     else{
-                        System.out.println("Error: Received "+cmd);
+
+                        trainmap.update(code);
+                        pw.println("START_OK");
+                        pw.flush();
+
+
                     }
-
-
 
                 }
                 else if (cmd2.equals("RET")){
