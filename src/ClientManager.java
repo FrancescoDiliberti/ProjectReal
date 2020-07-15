@@ -294,7 +294,7 @@ public class ClientManager implements Runnable{
                         coding= false;
                         System.out.println("La ricerca è stata interrotta..");
                     }
-                    else{//se siamo qui il treno è presente almeno nella mappa generica dei treni
+                    else{//se siamo qui il treno è presente nella mappa dei treni
 
 
 
@@ -314,13 +314,16 @@ public class ClientManager implements Runnable{
             else if(cmd.equals("SRCH")){//comando ricerca da clientTreno
                 mapCopy = trainmap.getMapCopy();
                 String code = msg_scanner.next();
-                while(!mapCopy.containsKey(code)){
+               while(!mapCopy.containsKey(code)){
                     pw.println("CODE_NOTOK");
                     pw.flush();
-                    code= client_scanner.nextLine();
+                    code = client_scanner.nextLine();
+
+
                 }
-                pw.println(mapCopy.get(code).toString());
-                pw.flush();
+
+                   pw.println(mapCopy.get(code).toString());
+                   pw.flush();
 
 
 

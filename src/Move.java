@@ -35,6 +35,7 @@ public class Move implements Runnable {
             t.setLastStopDone(t.getStops().get(y));
             t.setLastUpdate(LocalTime.now());
             System.out.println("Last stop done: " + t.getLastStopDone() + "--Last Update: " + t.getLastUpdate());
+            y++;
 
 
 

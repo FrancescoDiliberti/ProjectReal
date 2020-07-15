@@ -66,14 +66,15 @@ public class ClientTreno {
 
                         pw.println("SRCH "+ code);
                         pw.flush();
-                        msg_received = server_scanner.next();
+                        msg_received = server_scanner.nextLine();
                         while(msg_received.equals("CODE_NOTOK")){
-                            System.out.println("Code non trovato..");
-                            System.out.print("Inserisci un nuovo codice: ");
+                            System.out.println("Codice non trovato..");
+                            System.out.println("Inserisci un nuovo codice: ");
                             code = user_scanner.next();
                             pw.println(code);
                             pw.flush();
                             msg_received = server_scanner.nextLine();
+
                         }
 
                         if (msg_received.equals("BEGIN")){

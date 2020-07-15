@@ -203,7 +203,7 @@ public class Treno implements Serializable {
 
                     }
                 }
-                s= s + "\n\n---PREZZO DEL BIGLIETTO :" +ticket_prize;
+                s= s + "\n\n---PREZZO DEL BIGLIETTO : " +ticket_prize+" EURO";
                 s=s +"\n\nEND";
 
 
@@ -221,13 +221,11 @@ public class Treno implements Serializable {
                     s = s + "---FERMATA " + i + ": " + m;
                     i++;
                 }
-                for( Long l: timeBetweenStops){
-                    s=s+ "\n\n---time "+l;
-                }
+
                 s = s + "\n\n---ORARIO DI PARTENZA: " + orarioPartenza + "\n\n";
                 s = s + "---ORARIO DI ARRIVO: " + orarioArrivo + "\n\n";
                 s = s + "---DURATA DEL VIAGGIO: " + ChronoUnit.HOURS.between(orarioPartenza, orarioArrivo) + " ORE E " + (ChronoUnit.MINUTES.between(orarioPartenza, orarioArrivo) - 60 * ChronoUnit.HOURS.between(orarioPartenza, orarioArrivo)) + " MINUTI\n";
-                s = s + "\n---PREZZO DEL BIGLIETTO: " + ticket_prize + "\n\n";
+                s = s + "\n---PREZZO DEL BIGLIETTO: " + ticket_prize + " EURO\n\n";
                 if (isEvery_day()) {
                     s = s + "---OGNI GIORNO\n\n";
                 } else {
@@ -295,7 +293,7 @@ public class Treno implements Serializable {
 
                     }
                 }
-                s= s + "\n\n---PREZZO DEL BIGLIETTO :" +ticket_prize;
+                s= s + "\n\n---PREZZO DEL BIGLIETTO: " +ticket_prize+" EURO";
                 s=s +"\n\nEND";
 
 

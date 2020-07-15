@@ -92,7 +92,7 @@ public class ClientAmministrazione {
                                 while (hasStops) {
                                     System.out.print("Inserisci la fermata "+i+": ");
                                     String stop = user_scanner.next();
-                                    System.out.print("Quanti minuti ci mette da "+departure+ " a "+stop +"?");
+                                    System.out.print("Quanti minuti ci mette da "+departure.toUpperCase()+ " a "+stop.toUpperCase() +"?");
                                     time= user_scanner.nextLong();
                                     System.out.println("DEBUG: Sending " + stop);
                                     pw.println(stop+ " "+ time);
@@ -105,7 +105,7 @@ public class ClientAmministrazione {
                                         if (resp.equals("N")) {
                                             hasStops = false;
                                             error_2=false;
-                                            System.out.print("Quanti minuti ci mette da "+stop+" a "+arrive +"?");
+                                            System.out.print("Quanti minuti ci mette da "+stop.toUpperCase()+" a "+arrive.toUpperCase() +"?");
                                             time = user_scanner.nextLong();
                                             System.out.println("DEBUG: Sending " + arrive + " "+time);
                                             pw.println(arrive+ " "+time);
@@ -132,7 +132,7 @@ public class ClientAmministrazione {
                             } else if (s.equals("N")) {
                                 error = false;
 
-                                System.out.print("Quanti minuti ci mette per arrivare a "+arrive +"?");
+                                System.out.print("Quanti minuti ci mette per arrivare a "+arrive.toUpperCase() +"?");
                                 time = user_scanner.nextLong();
                                 System.out.println("DEBUG: Sending " + arrive);
                                 pw.println(arrive+" "+time);
