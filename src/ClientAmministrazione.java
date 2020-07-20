@@ -94,7 +94,7 @@ public class ClientAmministrazione {
                                     String stop = user_scanner.next();
                                     System.out.print("Quanti minuti ci mette da "+departure.toUpperCase()+ " a "+stop.toUpperCase() +"?");
                                     time= user_scanner.nextLong();
-                                    System.out.println("DEBUG: Sending " + stop);
+
                                     pw.println(stop+ " "+ time);
                                     i++;
                                     pw.flush();
@@ -107,10 +107,10 @@ public class ClientAmministrazione {
                                             error_2=false;
                                             System.out.print("Quanti minuti ci mette da "+stop.toUpperCase()+" a "+arrive.toUpperCase() +"?");
                                             time = user_scanner.nextLong();
-                                            System.out.println("DEBUG: Sending " + arrive + " "+time);
+
                                             pw.println(arrive+ " "+time);
                                             pw.flush();
-                                            System.out.println("DEBUG: Sending ENDOFSTOPS");
+
                                             pw.println("ENDOFSTOPS");
                                             pw.flush();
                                         }
@@ -132,12 +132,12 @@ public class ClientAmministrazione {
                             } else if (s.equals("N")) {
                                 error = false;
 
-                                System.out.print("Quanti minuti ci mette per arrivare a "+arrive.toUpperCase() +"?");
+                                System.out.print("Quanti minuti impiega per arrivare a "+arrive.toUpperCase() +"?");
                                 time = user_scanner.nextLong();
-                                System.out.println("DEBUG: Sending " + arrive);
+
                                 pw.println(arrive+" "+time);
                                 pw.flush();
-                                System.out.println("DEBUG: Sending ENDOFSTOPS");
+
                                 pw.println("ENDOFSTOPS");
                                 pw.flush();
 
@@ -153,7 +153,7 @@ public class ClientAmministrazione {
                         System.out.print("Inserisci orario di partenza(hh:mm): ");
                         String dep_time = user_scanner.next();
 
-                        System.out.println("DEBUG: Sending " + dep_time);
+
                         pw.println(dep_time);
                         pw.flush();
                         System.out.print("Inserisci orario di arrivo(hh:mm): ");
@@ -166,12 +166,12 @@ public class ClientAmministrazione {
                             arr_time= user_scanner.next();
                         }
 
-                        System.out.println("DEBUG: Sending " + arr_time);
+
                         pw.println(arr_time);
                         pw.flush();
 
 
-                            System.out.print("Quanti giorni alla settimana il treno parte? ");
+                            System.out.print("Quanti giorni alla settimana parte il treno? ");
                             int days = user_scanner.nextInt();
                             while(days>7 || days== 0){
                                 System.out.print("Inserisci un numero corretto di giorni :");
@@ -180,20 +180,20 @@ public class ClientAmministrazione {
                             if(days==7) {
                                 pw.println("EVERY");
                                 pw.flush();
-                                System.out.println("DEBUG: Sending EVERY");
+
 
                             }
                             else {
                                 for (int i = 1; i <= days; i++) {
                                     System.out.println("Inserisci giorno "+i+": ");
                                     String day = user_scanner.next();
-                                    System.out.println("DEBUG: Sending " + day+i);
+
                                     pw.println(day);
                                     pw.flush();
 
                             }
                                 msg_to_send = "END_OFMSG";
-                                System.out.println("DEBUG: Sending " + msg_to_send);
+
                                 pw.println(msg_to_send);
                                 pw.flush();
 
@@ -222,7 +222,7 @@ public class ClientAmministrazione {
                             do {
                                 System.out.print("Il codice del treno è già esistente, Inseriscine un altro :");
                                 String new_code = user_scanner.next();
-                                System.out.println("DEBUG: Sending " + new_code);
+
                                 pw.println(new_code);
                                 pw.flush();
                             } while (server_scanner.nextLine().equals("CODE_NOTOK"));
@@ -244,7 +244,7 @@ public class ClientAmministrazione {
                         msg_to_send = "REM " + trainCode;
                         pw.println(msg_to_send);
                         pw.flush();
-                        System.out.println("DEBUG: Sending "+msg_to_send);
+
                         msg_received= server_scanner.nextLine();
                         if(msg_received.equals("REM_OK")){
                             System.out.println("Treno eliminato correttamente!");

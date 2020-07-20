@@ -322,7 +322,7 @@ public class ClientManager implements Runnable{
 
                 }
 
-                   pw.println(mapCopy.get(code).toString());
+                   pw.println("CODE_OK");
                    pw.flush();
 
 
@@ -356,8 +356,7 @@ public class ClientManager implements Runnable{
             }
             else {
                 System.out.println("Unknown command "+ message);
-                pw.println("ERROR_CMD");
-                pw.flush();
+
             }
 
 

@@ -56,7 +56,27 @@ public class ClientTreno {
                 choice = user_scanner.nextInt();
                 switch (choice){
                     case 0:
-                        boolean show = true;
+
+                        boolean showing = true;
+                        System.out.println("Ecco l'elenco dei codici di tutti i treni");
+                        pw.println("SHOWCODES");
+                        pw.flush();
+                        msg_received = server_scanner.nextLine();
+
+                        if (msg_received.equals("BEGIN")) {
+                            System.out.println("Ricevo il treno...");
+                            while (showing) {
+                                msg_received = server_scanner.nextLine();
+                                if (msg_received.equals("END")) {
+                                    showing = false;
+
+                                } else {
+                                    // printing codes
+                                    System.out.println(msg_received);
+                                }
+                            }
+                        }
+
 
 
 
@@ -77,24 +97,9 @@ public class ClientTreno {
 
                         }
 
-                        if (msg_received.equals("BEGIN")){
+                        if (msg_received.equals("CODE_OK")){
 
-
-
-
-
-                                System.out.println("Ricevo il treno....");
-                                while (show) {
-                                    msg_received = server_scanner.nextLine();
-                                    if (msg_received.equals("END")) {
-                                        show = false;
-
-                                    } else {
-                                        // printing the trains
-                                        System.out.println(msg_received);
-                                    }
-                                }
-                            //qui devo far scegliere cosa fare col treno, se farlo partire, se indicare che è arrivato o tornare indietro
+                            //qui devo far scegliere cosa fare col treno, se farlo partire o tornare indietro
                             System.out.println("\n-------------------------------\n");
                             System.out.println("0 - Fai partire il treno");
                             System.out.println("1 - Ritorna indietro");
@@ -104,10 +109,11 @@ public class ClientTreno {
                                 case 0:
                                     pw.println("START");
                                     pw.flush();
-                                    msg_received = server_scanner.next();
+                                    msg_received = server_scanner.nextLine();
                                     int i=1;
                                     if(msg_received.equals("START_OK")){
                                         System.out.println("Il treno è partito...");
+                                        break;
 
 
 
@@ -131,7 +137,7 @@ public class ClientTreno {
 
                         }
                         else{
-                            System.out.println("Error: unkown message");
+                            System.out.println("Error: unkown message "+msg_received);
 
                         }
 
@@ -143,13 +149,13 @@ public class ClientTreno {
                         pw.println("SHOW");
                         pw.flush();
                         msg_received = server_scanner.nextLine();
-                        boolean showing = true;
+                        boolean show = true;
                         if (msg_received.equals("BEGIN")) {
                             System.out.println("Receiving trains....");
-                            while (showing) {
+                            while (show) {
                                 msg_received = server_scanner.nextLine();
                                 if (msg_received.equals("END")) {
-                                    showing = false;
+                                    show = false;
                                     System.out.println("List of trains ended");
                                 } else {
                                     // printing the trains
