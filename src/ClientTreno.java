@@ -64,7 +64,7 @@ public class ClientTreno {
                         msg_received = server_scanner.nextLine();
 
                         if (msg_received.equals("BEGIN")) {
-                            System.out.println("Ricevo il treno...");
+
                             while (showing) {
                                 msg_received = server_scanner.nextLine();
                                 if (msg_received.equals("END")) {
@@ -90,7 +90,7 @@ public class ClientTreno {
                         while(msg_received.equals("CODE_NOTOK")){
                             System.out.println("Codice non trovato..");
                             System.out.println("Inserisci un nuovo codice: ");
-                            code = user_scanner.next();
+                            code = user_scanner.nextLine();
                             pw.println(code);
                             pw.flush();
                             msg_received = server_scanner.nextLine();

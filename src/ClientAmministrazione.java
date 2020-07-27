@@ -92,7 +92,7 @@ public class ClientAmministrazione {
                                 while (hasStops) {
                                     System.out.print("Inserisci la fermata "+i+": ");
                                     String stop = user_scanner.next();
-                                    System.out.print("Quanti minuti ci mette da "+departure.toUpperCase()+ " a "+stop.toUpperCase() +"?");
+                                    System.out.print("Quanti minuti impiega da "+departure.toUpperCase()+ " a "+stop.toUpperCase() +"?");
                                     time= user_scanner.nextLong();
 
                                     pw.println(stop+ " "+ time);
@@ -105,7 +105,7 @@ public class ClientAmministrazione {
                                         if (resp.equals("N")) {
                                             hasStops = false;
                                             error_2=false;
-                                            System.out.print("Quanti minuti ci mette da "+stop.toUpperCase()+" a "+arrive.toUpperCase() +"?");
+                                            System.out.print("Quanti minuti impiega da "+stop.toUpperCase()+" a "+arrive.toUpperCase() +"?");
                                             time = user_scanner.nextLong();
 
                                             pw.println(arrive+ " "+time);
